@@ -63,14 +63,6 @@ app.layout =  html.Div([
 
     dbc.Row(
         [
-            # zero
-            dbc.Col(
-                [
-                    dbc.Button('Set current angle to zero', id='b_zero_angle', className='center'),
-                    html.Div(id='ret_zero_angle'),
-                ]
-            ),
-
             # return to zero
             dbc.Col(
                 [
@@ -120,20 +112,6 @@ def spin_clock(n):
     if 'b_spin_clock' in triggered:
         print('cw')
         sm.move_servo('cw')
-    return ''
-
-# zero
-@app.callback(
-    Output(component_id='ret_zero_angle', component_property='children'),
-    Input(component_id='b_zero_angle', component_property='n_clicks'),
-)
-def reset_zero(n):
-    global sm
-    triggered = [p['prop_id'].split('.')[0] for p in dash.callback_context.triggered]
-    if 'b_zero_angle' in triggered:
-        print('zero')
-        sm.angle = 0
-        sm.update_fig()
     return ''
 
 # return to zero

@@ -3,7 +3,6 @@ from gpiozero import AngularServo
 from gpiozero.pins.pigpio import PiGPIOFactory
 
 import plotly.graph_objects as go
-from time import sleep
 
 class servo_manager:
     def __init__(self):
@@ -13,21 +12,6 @@ class servo_manager:
         self.angle = 0
         # self.init_servo()
         self.update_fig()
-
-    # def __del__(self):
-    #     self.pwm.ChangeDutyCycle(0) # this prevents jitter
-    #     self.pwm.stop() # stops the pwm on 13
-    #     GPIO.cleanup()
-
-
-    # def init_servo(self):
-        
-    #     GPIO.setmode(GPIO.BCM)
-    #     GPIO.setup(18,GPIO.OUT)
-
-    #     # setup PWM process
-    #     self.pwm = GPIO.PWM(self.servo_pin,50) # 50 Hz (20 ms PWM period)
-    #     self.pwm.start(0)
 
 
     def update_fig(self):
@@ -77,5 +61,3 @@ class servo_manager:
         self.angle = 0
         self.servo.angle = (self.angle * 2)
         self.update_fig()
-
-
