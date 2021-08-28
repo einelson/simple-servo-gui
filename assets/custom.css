@@ -1,0 +1,18 @@
+* {
+    overflow-x: hidden;
+}
+
+body {
+    background-color: rgb(37, 37, 37);
+}
+
+.center{
+    display: block;
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 20px;
+    height: 200px;
+    border: 1px solid white;
+    font-size: large;
+}
