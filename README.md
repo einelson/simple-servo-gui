@@ -1,6 +1,6 @@
 # Servo GUI
 This is a basic applicatin to test GUI and servo control.<br>
-This was designed to run on the raspberry pi with the web server being hosted to [localhost](https://localhost:8080)
+This was designed to run on the raspberry pi with the web server being hosted to the [localhost](https://localhost:8080) of the raspberry pi. If you are connecting to a Pi on the same network you will need to enter the IP of the raspberry pi rather than localhost.
 
 
 ## Setting up
