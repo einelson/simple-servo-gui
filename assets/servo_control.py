@@ -16,7 +16,7 @@ class servo_manager:
 
     def update_fig(self):
         self.fig = go.Figure(go.Indicator(
-            mode = "gauge+number+delta",
+            mode = "gauge+number",
             value = self.angle * -1,
             domain = {'x': [0, 1], 'y': [0, 1]},
             title = {'text': "Servo angle", 'font': {'size': 24}},
@@ -33,7 +33,7 @@ class servo_manager:
                 'threshold': {
                     'line': {'color': "red", 'width': 4},
                     'thickness': 0.75,
-                    'value': 490}}))
+                    'value': self.angle * -.5}}))
 
         self.fig.update_layout(paper_bgcolor = 'rgb(37, 37, 37)', font = {'color': "white", 'family': "Arial"})
         
@@ -48,12 +48,9 @@ class servo_manager:
         elif direction == 'ccw' and self.angle != -180:
             self.angle -= 20
         else:
-            print('angle too extreme!')
             return
 
         self.servo.angle = self.angle
-        print(self.servo.pulse_width)
-
         self.update_fig()
 
     # goto zero

@@ -76,7 +76,7 @@ app.layout =  html.Div([
     # interval
     dcc.Interval(
         id='interval',
-        interval=500, # in milliseconds
+        interval=50, # in milliseconds
         n_intervals=0
     )
 
@@ -97,7 +97,7 @@ def spin_counter(n):
     global sm
     triggered = [p['prop_id'].split('.')[0] for p in dash.callback_context.triggered]
     if 'b_spin_counter' in triggered:
-        print('ccw')
+        # print('ccw')
         sm.move_servo('ccw')
     return ''
 
@@ -110,7 +110,7 @@ def spin_clock(n):
     global sm
     triggered = [p['prop_id'].split('.')[0] for p in dash.callback_context.triggered]
     if 'b_spin_clock' in triggered:
-        print('cw')
+        # print('cw')
         sm.move_servo('cw')
     return ''
 
@@ -123,7 +123,7 @@ def ret_zero(n):
     global sm
     triggered = [p['prop_id'].split('.')[0] for p in dash.callback_context.triggered]
     if 'b_ret_zero' in triggered:
-        print('goto zero')
+        # print('goto zero')
         sm.goto_zero()
         
 
