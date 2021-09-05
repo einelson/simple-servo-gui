@@ -16,24 +16,24 @@ class servo_manager:
 
     def update_fig(self):
         self.fig = go.Figure(go.Indicator(
-            mode = "gauge+number+delta",
-            value = self.angle * -1,
+            mode = "gauge+number",
+            value = self.angle,
             domain = {'x': [0, 1], 'y': [0, 1]},
             title = {'text': "Servo angle", 'font': {'size': 24}},
             # delta = {'reference': 400, 'increasing': {'color': "RebeccaPurple"}},
             gauge = {
-                'axis': {'range': [-180,180], 'tickwidth': 1, 'tickcolor': "darkblue"},
-                'bar': {'color': "darkblue"},
+                'axis': {'range': [-90,90], 'tickwidth': 1, 'tickcolor': "darkblue"},
+                'bar': {'color': "white"},
                 'bgcolor': "white",
                 # 'borderwidth': 2,
                 # 'bordercolor': "gray",
                 # 'steps': [
-                #     {'range': [0, 250], 'color': 'cyan'},
+                #     {'range': [self.drag_angle, self.drag_angle + 1], 'color': 'blue'}],
                 #     {'range': [250, 400], 'color': 'royalblue'}],
                 'threshold': {
                     'line': {'color': "red", 'width': 4},
                     'thickness': 0.75,
-                    'value': 490}}))
+                    'value': self.angle}})) # mult by 2 to get the correct angle
 
         self.fig.update_layout(paper_bgcolor = 'rgb(37, 37, 37)', font = {'color': "white", 'family': "Arial"})
         
@@ -41,23 +41,18 @@ class servo_manager:
         return self.fig
 
 
-    def move_servo(self, direction):
-        # check if angle is going to be too high or low 0 to 180
-        if direction == 'cw' and self.angle != 180:
-            self.angle += 20
-        elif direction == 'ccw' and self.angle != -180:
-            self.angle -= 20
-        else:
-            print('angle too extreme!')
-            return
-
-        self.servo.angle = self.angle
-        print(self.servo.pulse_width)
-
+    def move_servo(self, angle):
+        # update angle
+        self.angle = angle
+        # servo moves according to angle
+        # the - can be removed depending which side of the servo you are looking at
+        # the 2 is to translate to the correct angle
+        self.servo.angle = (self.angle *-2)
+        # update graphic
         self.update_fig()
 
     # goto zero
     def goto_zero(self):
         self.angle = 0
-        self.servo.angle = (self.angle * 2)
+        self.servo.angle = self.angle
         self.update_fig()

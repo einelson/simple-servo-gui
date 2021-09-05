@@ -9,7 +9,6 @@ import dash
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_html_components as html
-# import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 
 from assets.servo_control import servo_manager
@@ -35,39 +34,33 @@ app.layout =  html.Div([
 
     dbc.Row(
         [
-            # counter clockwise
-            dbc.Col(
-                [
-                    dbc.Button('Counter Clockwise', id='b_spin_clock', className='center'),
-                    html.Div(id='ret_spin_clock'),
-                ],
-            ),
-
             # gauge to show current position
             dbc.Col(
                 [
                     dcc.Graph(id='fig', figure=sm.get_fig())
                 ],
-            ),
-
-            # clockwise button
-            dbc.Col(
-                [
-                    dbc.Button('Clockwise', id='b_spin_counter', className='center'),
-                    html.Div(id='ret_spin_counter'),
-
-                ],
-            ),            
+            ),        
         ],
     ),
 
     dbc.Row(
         [
+            
             # return to zero
             dbc.Col(
                 [
+                    dcc.Slider(id='slider-drag', min=-90, max=90, value=0, updatemode='drag'),
+                    # daq.Slider(
+                    #     min=-90,
+                    #     max=90,
+                    #     value=0,
+                    #     handleLabel={"showCurrentValue": True,"label": "Angle"},
+                    #     step=10,
+                    #     id='slider-drag',
+                    # ),
+                    html.Div(id='slider-drag-output', style={'margin-top': 5, 'color':'white'}),
+
                     dbc.Button('Return to zero', id='b_ret_zero', className='center'),
-                    html.Div(id='ret_ret_zero'),
                 ],                
             ),
         ],
@@ -76,7 +69,7 @@ app.layout =  html.Div([
     # interval
     dcc.Interval(
         id='interval',
-        interval=500, # in milliseconds
+        interval=50, # in milliseconds
         n_intervals=0
     )
 
@@ -87,44 +80,27 @@ app.layout =  html.Div([
 ### Callbacks
 ###
 ################################################################################
-
-# counter clockwise
+# slider
 @app.callback(
-    Output(component_id='ret_spin_counter', component_property='children'),
-    Input(component_id='b_spin_counter', component_property='n_clicks'),
+    Output('slider-drag-output', 'children'),
+    Input('slider-drag', 'value')
 )
-def spin_counter(n):
+def display_value(value):
     global sm
-    triggered = [p['prop_id'].split('.')[0] for p in dash.callback_context.triggered]
-    if 'b_spin_counter' in triggered:
-        print('ccw')
-        sm.move_servo('ccw')
-    return ''
-
-# clockwise
-@app.callback(
-    Output(component_id='ret_spin_clock', component_property='children'),
-    Input(component_id='b_spin_clock', component_property='n_clicks'),
-)
-def spin_clock(n):
-    global sm
-    triggered = [p['prop_id'].split('.')[0] for p in dash.callback_context.triggered]
-    if 'b_spin_clock' in triggered:
-        print('cw')
-        sm.move_servo('cw')
+    sm.move_servo(value)
     return ''
 
 # return to zero
 @app.callback(
-    Output(component_id='ret_ret_zero', component_property='children'),
+    Output('slider-drag', 'value'),
     Input(component_id='b_ret_zero', component_property='n_clicks')
 )
 def ret_zero(n):
     global sm
     triggered = [p['prop_id'].split('.')[0] for p in dash.callback_context.triggered]
     if 'b_ret_zero' in triggered:
-        print('goto zero')
         sm.goto_zero()
+    return 0
         
 
 # update grapic
