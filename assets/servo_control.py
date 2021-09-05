@@ -17,13 +17,13 @@ class servo_manager:
     def update_fig(self):
         self.fig = go.Figure(go.Indicator(
             mode = "gauge+number",
-            value = self.angle * -1,
+            value = self.angle * -.5,
             domain = {'x': [0, 1], 'y': [0, 1]},
             title = {'text': "Servo angle", 'font': {'size': 24}},
             # delta = {'reference': 400, 'increasing': {'color': "RebeccaPurple"}},
             gauge = {
-                'axis': {'range': [-180,180], 'tickwidth': 1, 'tickcolor': "darkblue"},
-                'bar': {'color': "darkblue"},
+                'axis': {'range': [-90,90], 'tickwidth': 1, 'tickcolor': "darkblue"},
+                'bar': {'color': "white"},
                 'bgcolor': "white",
                 # 'borderwidth': 2,
                 # 'bordercolor': "gray",
