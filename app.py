@@ -8,8 +8,8 @@ import dash
 
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
-import dash_html_components as html
-# import plotly.graph_objects as go
+from dash import html
+import dash_daq as daq
 from dash.dependencies import Input, Output
 
 from assets.servo_control import servo_manager
@@ -35,14 +35,6 @@ app.layout =  html.Div([
 
     dbc.Row(
         [
-            # counter clockwise
-            dbc.Col(
-                [
-                    dbc.Button('Counter Clockwise', id='b_spin_clock', className='center'),
-                    html.Div(id='ret_spin_clock'),
-                ],
-            ),
-
             # gauge to show current position
             dbc.Col(
                 [
@@ -53,8 +45,15 @@ app.layout =  html.Div([
             # clockwise button
             dbc.Col(
                 [
-                    dbc.Button('Clockwise', id='b_spin_counter', className='center'),
-                    html.Div(id='ret_spin_counter'),
+                    # dbc.Button('Clockwise', id='b_spin_counter', className='center'),
+                    daq.Joystick(
+                        id='servo_control',
+                        label="Servo controller",
+                        angle=0,
+                        size=250,
+                        style={'color':'white'},
+                    ),
+                    html.Div(id='ret_spin', style={'color':'white'},),
 
                 ],
             ),            
@@ -66,7 +65,7 @@ app.layout =  html.Div([
             # return to zero
             dbc.Col(
                 [
-                    dbc.Button('Return to zero', id='b_ret_zero', className='center'),
+                    dbc.Button('Return to zero', id='b_ret_zero', className='centered'),
                     html.Div(id='ret_ret_zero'),
                 ],                
             ),
@@ -76,7 +75,7 @@ app.layout =  html.Div([
     # interval
     dcc.Interval(
         id='interval',
-        interval=500, # in milliseconds
+        interval=50, # in milliseconds
         n_intervals=0
     )
 
@@ -90,29 +89,13 @@ app.layout =  html.Div([
 
 # counter clockwise
 @app.callback(
-    Output(component_id='ret_spin_counter', component_property='children'),
-    Input(component_id='b_spin_counter', component_property='n_clicks'),
+    Output(component_id='ret_spin', component_property='children'),
+    Input(component_id='servo_control', component_property='angle'),
 )
-def spin_counter(n):
+def spin_counter(angle):
     global sm
-    triggered = [p['prop_id'].split('.')[0] for p in dash.callback_context.triggered]
-    if 'b_spin_counter' in triggered:
-        print('ccw')
-        sm.move_servo('ccw')
-    return ''
-
-# clockwise
-@app.callback(
-    Output(component_id='ret_spin_clock', component_property='children'),
-    Input(component_id='b_spin_clock', component_property='n_clicks'),
-)
-def spin_clock(n):
-    global sm
-    triggered = [p['prop_id'].split('.')[0] for p in dash.callback_context.triggered]
-    if 'b_spin_clock' in triggered:
-        print('cw')
-        sm.move_servo('cw')
-    return ''
+    sm.move_servo()
+    return angle
 
 # return to zero
 @app.callback(

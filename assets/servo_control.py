@@ -16,14 +16,14 @@ class servo_manager:
 
     def update_fig(self):
         self.fig = go.Figure(go.Indicator(
-            mode = "gauge+number+delta",
-            value = self.angle * -1,
+            mode = "gauge+number",
+            value = self.angle * -.5,
             domain = {'x': [0, 1], 'y': [0, 1]},
             title = {'text': "Servo angle", 'font': {'size': 24}},
             # delta = {'reference': 400, 'increasing': {'color': "RebeccaPurple"}},
             gauge = {
                 'axis': {'range': [-180,180], 'tickwidth': 1, 'tickcolor': "darkblue"},
-                'bar': {'color': "darkblue"},
+                'bar': {'color': "white"},
                 'bgcolor': "white",
                 # 'borderwidth': 2,
                 # 'bordercolor': "gray",
@@ -33,7 +33,7 @@ class servo_manager:
                 'threshold': {
                     'line': {'color': "red", 'width': 4},
                     'thickness': 0.75,
-                    'value': 490}}))
+                    'value': self.angle * -.5}}))
 
         self.fig.update_layout(paper_bgcolor = 'rgb(37, 37, 37)', font = {'color': "white", 'family': "Arial"})
         
@@ -41,18 +41,17 @@ class servo_manager:
         return self.fig
 
 
-    def move_servo(self, direction):
+    def move_servo(self):
         # check if angle is going to be too high or low 0 to 180
-        if direction == 'cw' and self.angle != 180:
-            self.angle += 20
-        elif direction == 'ccw' and self.angle != -180:
-            self.angle -= 20
-        else:
-            print('angle too extreme!')
-            return
+        # if direction == 'cw' and self.angle != 180:
+        #     self.angle += 20
+        # elif direction == 'ccw' and self.angle != -180:
+        #     self.angle -= 20
+        # else:
+        #     print('angle too extreme!')
+        #     return
 
         self.servo.angle = self.angle
-        print(self.servo.pulse_width)
 
         self.update_fig()
 

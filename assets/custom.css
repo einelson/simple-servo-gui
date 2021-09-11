@@ -6,7 +6,7 @@ body {
     background-color: rgb(37, 37, 37);
 }
 
-.center{
+.centered{
     display: block;
     width: 90%;
     margin-right: auto;
